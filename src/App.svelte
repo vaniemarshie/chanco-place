@@ -8,16 +8,45 @@
 		height: 100%;
 		overflow: hidden;
 
+		background-color: #000000;
+
 		font-family: "SN Pro", sans-serif;
 		font-optical-sizing: auto;
 		font-weight: 400;
 		font-style: normal;
+	}
+
+	#loading-text {
+		position: absolute;
+		width: 100vw;
+		height: 100vh;
+		overflow: hidden;
+		font-size: 32px;
+
+		background-color: #14171c;
+		color: #ffffff;
+
+		opacity: 1;
+		transition: opacity 1s;
+
+		z-index: 2;
+
+		display: flex;
+		justify-content: center; /* Centers horizontally */
+		align-items: center;     /* Centers vertically */
+	}
+
+	#loading-text.done {
+		opacity: 0;
+		pointer-events: none;
 	}
 </style>
 
 <script lang="ts">
 	import * as THREE from 'three'
 	import { MMD, MMDLoader } from '@moeru/three-mmd'
+
+	let isLoading = true;
 
 	interface avatar {
 		name: string,
@@ -49,6 +78,8 @@
 	}
 
 	function init() {
+		isLoading = false;
+
 		const scene = new THREE.Scene()
 		scene.background = skyboxTexture
 	
@@ -57,9 +88,13 @@
 		const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.8 );
 		scene.add( directionalLight );
 
-		const renderer = new THREE.WebGLRenderer()
+		const canvas = document.getElementById('gameplay-canvas') as HTMLCanvasElement
+		const renderer = new THREE.WebGLRenderer({canvas: canvas})
 		renderer.setSize(window.innerWidth, window.innerHeight)
-		document.body.appendChild(renderer.domElement)
+
+		canvas.addEventListener('contextmenu', function(event) {
+			event.preventDefault();
+		});
 
 		window.addEventListener('resize', () => {
 			camera.aspect = window.innerWidth / window.innerHeight
@@ -96,3 +131,7 @@
 
 	load()
 </script>
+
+<div id='loading-text' class:done={!isLoading}>Loading Assets...</div>
+
+<canvas id="gameplay-canvas"></canvas>
