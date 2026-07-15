@@ -85,7 +85,7 @@
 	
 		const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 
-		const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.8 );
+		const directionalLight = new THREE.DirectionalLight( 0xffffff, 1.2 );
 		scene.add( directionalLight );
 
 		const canvas = document.getElementById('gameplay-canvas') as HTMLCanvasElement
