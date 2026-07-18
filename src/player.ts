@@ -131,7 +131,7 @@ export class Player {
 	}
 }
 
-const playerSpeed = 8;
+const playerSpeed = 16;
 
 export class PlayerController {
 	localPlayer: Player
