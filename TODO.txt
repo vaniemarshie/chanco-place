@@ -1,0 +1,7 @@
+- late joiners do not have the rotation of other players
+- wellness check
+	- ping every 10 seconds to see if a peer is still alive
+- chat system
+- join/settings menu (show before connecting)
+- nametags
+- animations

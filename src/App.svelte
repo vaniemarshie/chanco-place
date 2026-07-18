@@ -44,88 +44,45 @@
 
 <script lang="ts">
 	import * as THREE from 'three'
-	import { MMD, MMDLoader } from '@moeru/three-mmd'
+	import { loadAvatars } from './player';
+	import { ChanMap, ChanRoom } from './room';
 
+	const map = new ChanMap();
 	let isLoading = true;
-
-	interface avatar {
-		name: string,
-		credit: string,
-		url: string,
-		mmd?: MMD
-	}
-
-	const avatars: Record<string, avatar> = {
-		miku: {name: 'Hatsune Miku', credit: 'Tawashi', url: 'models/CHANxCO_style_MIKU.pmx'}
-	}
-
-	let skyboxTexture: null | THREE.CubeTexture = null
 
 	function load() {
 		const manager = new THREE.LoadingManager();
 		manager.onLoad = init;
 
-		const mmdLoader = new MMDLoader([], manager)
-		const cubeLoader = new THREE.CubeTextureLoader(manager).setPath('skybox/')
-
-		for (const avatar of Object.values(avatars)) {
-			mmdLoader.load(avatar.url, (mmd) => {
-				avatar.mmd = mmd
-			})
-		}
-
-		skyboxTexture = cubeLoader.load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png'])
+		loadAvatars(manager);
+		map.load(manager);
 	}
 
 	function init() {
 		isLoading = false;
 
-		const scene = new THREE.Scene()
-		scene.background = skyboxTexture
-	
-		const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+		const room = new ChanRoom('room-1', map);
 
-		const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.8 );
-		scene.add( directionalLight );
-
-		const canvas = document.getElementById('gameplay-canvas') as HTMLCanvasElement
-		const renderer = new THREE.WebGLRenderer({canvas: canvas})
-		renderer.setSize(window.innerWidth, window.innerHeight)
+		let canvas = document.getElementById('gameplay-canvas') as HTMLCanvasElement;
+		const renderer = new THREE.WebGLRenderer({canvas: canvas});
+		renderer.setSize(window.innerWidth, window.innerHeight);
 
 		canvas.addEventListener('contextmenu', function(event) {
 			event.preventDefault();
 		});
 
 		window.addEventListener('resize', () => {
-			camera.aspect = window.innerWidth / window.innerHeight
-			camera.updateProjectionMatrix()
-			
 			renderer.setSize(window.innerWidth, window.innerHeight)
 		});
 
-		let pivot = new THREE.Object3D()
-		scene.add(pivot)
-		pivot.add(camera)
-		
-		camera.position.z = 20
-		camera.lookAt(pivot.position)
-
-		let miku = new THREE.Object3D()
-		scene.add(miku)
-
-		// shut the fuck up typescript
-		if (avatars.miku.mmd) {
-			let model = avatars.miku.mmd.mesh
-			model.position.y = -6
-			miku.add(model);
-		}
-	
+		// loop start!
+		const timer = new THREE.Timer();
 		renderer.setAnimationLoop((time) => {
-			miku.rotation.x = time / 2000
-			miku.rotation.y = time / 1000
-			pivot.rotation.y = time / 10000
-
-			renderer.render(scene, camera)
+			timer.update(time);
+			const delta = timer.getDelta();
+			// TODO: camera controls
+			room.tick(delta);
+			renderer.render(room.map.scene, room.controller.camera);
 		});
 	}
 
@@ -134,4 +91,4 @@
 
 <div id='loading-text' class:done={!isLoading}>Loading Assets...</div>
 
-<canvas id="gameplay-canvas"></canvas>
+<canvas id='gameplay-canvas'></canvas>
