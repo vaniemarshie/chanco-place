@@ -160,7 +160,6 @@ export class PlayerController {
 
 		let canvas = document.getElementById('gameplay-canvas') as HTMLCanvasElement;
 		canvas.addEventListener("mousedown", async (e) => {
-			console.log(e.button);
 			if (e.button == 2) {
 				await canvas.requestPointerLock();
 			}
