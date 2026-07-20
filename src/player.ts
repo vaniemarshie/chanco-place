@@ -110,7 +110,7 @@ export class Player {
 		if (avatar == this.avatar) return;
 		
 		this.avatar = avatar;
-		this.destroyAvatar()
+		this.destroyAvatar();
 
 		this.avatarMesh = SkeletonUtils.clone(avatars[avatar].mmd!.mesh) as THREE.SkinnedMesh;
 		this.avatarContainer.add(this.avatarMesh);
