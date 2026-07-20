@@ -175,11 +175,18 @@ export class PlayerController {
 			this.cameraPivot.rotation.x = clamp(this.cameraPivot.rotation.x - (e.movementY * 0.005), -1.5, 0);
 		}
 
+		const zoomCamera = (e: WheelEvent) => {
+			this.camera.position.z += e.deltaY * 0.05;
+			this.camera.position.z = clamp(this.camera.position.z, 10, 50);
+		}
+
 		function lockChangeAlert() {
 			if (document.pointerLockElement === canvas) {
 				document.addEventListener("mousemove", moveCamera);
+				document.addEventListener("wheel", zoomCamera);
 			} else {
 				document.removeEventListener("mousemove", moveCamera);
+				document.removeEventListener("wheel", zoomCamera);
 			}
 		}
 		document.addEventListener("pointerlockchange", lockChangeAlert);
