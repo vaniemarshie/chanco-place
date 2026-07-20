@@ -204,12 +204,18 @@ export class PlayerController {
 		this.inputs.bind('back', 'KeyS');
 		this.inputs.bind('left', 'KeyA');
 		this.inputs.bind('right', 'KeyD');
+		this.inputs.bind('run', 'ShiftLeft')
 	}
 
 	public tick(): PlayerMovementPacket | null {
 		let mVec = {
 			x: (this.inputs.state['right'] ? playerSpeed:0) + (this.inputs.state['left'] ? -playerSpeed:0),
 			z: (this.inputs.state['back'] ? playerSpeed:0) + (this.inputs.state['fwd'] ? -playerSpeed:0)
+		}
+		
+		if (this.inputs.state['run']) {
+			mVec.x *= 2;
+			mVec.z *= 2;
 		}
 
 		let rotatedMVec = mvToVector(mVec).applyEuler(new THREE.Euler(0, this.cameraPivot.rotation.y, 0, 'ZYX'));
