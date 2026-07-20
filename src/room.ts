@@ -63,7 +63,7 @@ export class ChanRoom {
 		this.plrMove = this.room.makeAction<PlayerMovementPacket>('move');
 
 		this.chngUser.onMessage = (username, {peerId}) => {
-			if (!(peerId in this.players)) {
+			if (!Object.hasOwn(this.players, peerId)) {
 				this.createPlayer(peerId);
 			}
 
@@ -72,7 +72,7 @@ export class ChanRoom {
 		}
 
 		this.chngAva.onMessage = (avatar, {peerId}) => {
-			if (!(peerId in this.players)) {
+			if (!Object.hasOwn(this.players, peerId)) {
 				this.createPlayer(peerId);
 			}
 
@@ -99,15 +99,20 @@ export class ChanRoom {
 			this.plrMove.send(this.localPlayer.createMovePacket(), {target: peerId});
 		}
 
-		this.room.onPeerLeave = peerId => {
+		this.room.onPeerLeave = (peerId: string) => {
+			if (!Object.hasOwn(this.players, peerId)) {
+				console.error(`${peerId} already doesn't exist!`);
+				return;
+			}
+			
 			this.players[peerId].destroyAvatar();
 			this.map.scene.remove(this.players[peerId].obj);
 			delete this.players[peerId];
-		}
+		};
 	}
 
 	createPlayer(peerId: string) {
-		if (peerId in this.players) {
+		if (Object.hasOwn(this.players, peerId)) {
 			console.error(`${peerId} already has a player!`);
 			return;
 		}
@@ -134,6 +139,7 @@ export class ChanRoom {
 
 			this.players[action.peerId].movePacket(action.packet);
 		}
+		this.moveQueue = [];
 
 		for (const player of Object.values(this.players)) {
 			player.tick(delta);

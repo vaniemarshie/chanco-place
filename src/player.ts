@@ -126,7 +126,7 @@ export class Player {
                     this.avatarMesh.material.dispose();
                 }
             }
-			this.avatarMesh.removeFromParent();
+			this.avatarContainer.remove(this.avatarMesh);
 		}
 	}
 }
