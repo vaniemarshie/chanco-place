@@ -66,7 +66,7 @@
 		
 		padding: 8px;
 		border-radius: 8px;
-		border: 2px solid #2C7C5B;
+		border: 2px solid;
 
 		box-sizing: border-box;
 	}
@@ -93,6 +93,11 @@
 	let input: HTMLInputElement;
 	let shortcutActive: boolean = true;
 
+
+	let borderColor = $state('#2C7C5B');
+	export function setBorderColor(color: string) {
+		borderColor = color;
+	}
 
 	interface logMessage {
 		text: string
@@ -172,5 +177,6 @@
 		onkeydown={send}
 		onfocus={() => onFocus(true)}
 		onblur={() => onFocus(false)}
+		style:border-color={borderColor}
 	>
 </div>

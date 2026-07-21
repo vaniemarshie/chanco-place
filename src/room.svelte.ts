@@ -78,7 +78,8 @@ export class ChanRoom {
 				text: msg,
 				type: 'global',
 				time: Date.now(),
-				playerName: this.players[peerId].username
+				playerName: this.players[peerId].username,
+				playerColor: avatars[this.players[peerId].avatar].color
 			});
 
 			// TODO: also chat bubbles once i make them
@@ -124,6 +125,7 @@ export class ChanRoom {
 
 		if (localStorage.getItem('avatar')) {
 			this.localPlayer.changeAvatar(localStorage.getItem('avatar') as string);
+			this.chat.setBorderColor(avatars[this.localPlayer.avatar].color);
 		}
 
 		this.chngName.send(this.localPlayer.username);
@@ -193,6 +195,7 @@ export class ChanRoom {
 
 				this.localPlayer.changeAvatar(aviName);
 				this.chngAva.send(this.localPlayer.avatar);
+				this.chat.setBorderColor(avatars[this.localPlayer.avatar].color);
 				this.chat.sendLogMessage({
 					text: `${this.localPlayer.username} has changed their avatar to ${avatars[aviName].name}.`,
 					type: 'global',
@@ -250,7 +253,8 @@ export class ChanRoom {
 			text: msg,
 			type: 'global',
 			time: Date.now(),
-			playerName: this.localPlayer.username
+			playerName: this.localPlayer.username,
+			playerColor: avatars[this.localPlayer.avatar].color
 		});
 
 		this.onChat.send(msg);

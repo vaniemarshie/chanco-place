@@ -9,26 +9,27 @@ interface avatar {
 	name: string,
 	credit: string,
 	url: string,
+	color: string,
 	mmd?: MMD
 }
 
 export const avatars: Record<string, avatar> = {
-	miku: {name: 'Hatsune Miku', credit: 'Tawashi', url: 'models/CHANxCO_style_MIKU.pmx'},
-	rin: {name: 'Kagamine Rin', credit: 'Tawashi', url: 'models/CHANxCO_style_RIN.pmx'},
-	len: {name: 'Kagamine Len', credit: 'Tawashi', url: 'models/CHANxCO_style_LEN.pmx'},
-	luka: {name: 'Megurine Luka', credit: 'Tawashi', url: 'models/CHANxCO_style_LUKA.pmx'},
-	meiko: {name: 'MEIKO', credit: 'Tawashi', url: 'models/CHANxCO_style_MEIKO.pmx'},
-	kaito: {name: 'KAITO', credit: 'Tawashi', url: 'models/CHANxCO_style_KAITO.pmx'},
-	gumi: {name: 'Megpoid GUMI', credit: 'Tawashi', url: 'models/CHANxCO_style_GUMI.pmx'},
-	gakupo: {name: 'Camui Gackpo', credit: 'Tawashi', url: 'models/CHANxCO_style_GAKUPO.pmx'},
-	teto: {name: 'Kasane Teto', credit: 'Tawashi', url: 'models/CHANxCO_style_TETO.pmx'},
-	neru: {name: 'Akita Neru', credit: 'Tawashi', url: 'models/CHANxCO_style_NERU.pmx'},
-	yukari: {name: 'Yuzuki Yukari', credit: 'Tawashi', url: 'models/CHANxCO_style_YUKARI_P.pmx'},
-	akari: {name: 'Kizuna Akari', credit: 'ちょむP', url: 'models/CHANxCO_style_AKARI.pmx'},
-	ia: {name: 'IA', credit: 'Ise Terumi', url: 'models/CHANxCO_style_custom_IA.pmx'},
-	one: {name: 'ONE', credit: 'Ise Terumi', url: 'models/CHANxCO_style_custom_ONE.pmx'},
-	momo: {name: 'Momo Momone', credit: 'Tawashi', url: 'models/CHANxCO_style_MOMO.pmx'},
-	haku: {name: 'Yowane Haku', credit: 'Tawashi', url: 'models/CHANxCO_style_HAKU.pmx'}
+	miku: {name: 'Hatsune Miku', credit: 'Tawashi', url: 'models/CHANxCO_style_MIKU.pmx', color: '#287A59'},
+	rin: {name: 'Kagamine Rin', credit: 'Tawashi', url: 'models/CHANxCO_style_RIN.pmx', color: '#D6C743'},
+	len: {name: 'Kagamine Len', credit: 'Tawashi', url: 'models/CHANxCO_style_LEN.pmx', color: '#A39F21'},
+	luka: {name: 'Megurine Luka', credit: 'Tawashi', url: 'models/CHANxCO_style_LUKA.pmx', color: '#FF7B92'},
+	meiko: {name: 'MEIKO', credit: 'Tawashi', url: 'models/CHANxCO_style_MEIKO.pmx', color: '#C3452B'},
+	kaito: {name: 'KAITO', credit: 'Tawashi', url: 'models/CHANxCO_style_KAITO.pmx', color: '#888CFB'},
+	gumi: {name: 'Megpoid GUMI', credit: 'Tawashi', url: 'models/CHANxCO_style_GUMI.pmx', color: '#31A912'},
+	gakupo: {name: 'Camui Gackpo', credit: 'Tawashi', url: 'models/CHANxCO_style_GAKUPO.pmx', color: '#765199'},
+	teto: {name: 'Kasane Teto', credit: 'Tawashi', url: 'models/CHANxCO_style_TETO.pmx', color: '#864357'},
+	neru: {name: 'Akita Neru', credit: 'Tawashi', url: 'models/CHANxCO_style_NERU.pmx', color: '#746E21'},
+	yukari: {name: 'Yuzuki Yukari', credit: 'Tawashi', url: 'models/CHANxCO_style_YUKARI_P.pmx', color: '#9D81BB'},
+	akari: {name: 'Kizuna Akari', credit: 'ちょむP', url: 'models/CHANxCO_style_AKARI.pmx', color: '#FF8142'},
+	ia: {name: 'IA', credit: 'Ise Terumi', url: 'models/CHANxCO_style_custom_IA.pmx', color: '#EB384D'},
+	one: {name: 'ONE', credit: 'Ise Terumi', url: 'models/CHANxCO_style_custom_ONE.pmx', color: '#EB383A'},
+	momo: {name: 'Momo Momone', credit: 'Tawashi', url: 'models/CHANxCO_style_MOMO.pmx', color: '#415F2C'},
+	haku: {name: 'Yowane Haku', credit: 'Tawashi', url: 'models/CHANxCO_style_HAKU.pmx', color: '#7C689E'}
 }
 
 export function loadAvatars(manager: THREE.LoadingManager) {
