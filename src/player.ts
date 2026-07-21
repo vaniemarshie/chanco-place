@@ -12,7 +12,7 @@ interface avatar {
 	mmd?: MMD
 }
 
-const avatars: Record<string, avatar> = {
+export const avatars: Record<string, avatar> = {
 	miku: {name: 'Hatsune Miku', credit: 'Tawashi', url: 'models/CHANxCO_style_MIKU.pmx'},
 	rin: {name: 'Kagamine Rin', credit: 'Tawashi', url: 'models/CHANxCO_style_RIN.pmx'},
 	len: {name: 'Kagamine Len', credit: 'Tawashi', url: 'models/CHANxCO_style_LEN.pmx'},
@@ -57,7 +57,7 @@ function mvToVector(vector: MoveVector): THREE.Vector3 {
 const rotationSpeed = 12;
 
 export class Player {
-	username: string = '???';
+	username: string = '';
 	avatar: string = '';
 
 	velocity: MoveVector = {x: 0, z: 0};
@@ -138,6 +138,7 @@ export class PlayerController {
 	cameraPivot: THREE.Object3D
 	camera: THREE.PerspectiveCamera
 	inputs: GameInputs
+	inputsDisabled: boolean = false
 
 	constructor(localPlayer: Player) {
 		this.localPlayer = localPlayer;
@@ -175,7 +176,7 @@ export class PlayerController {
 			this.cameraPivot.rotation.x = clamp(this.cameraPivot.rotation.x - (e.movementY * 0.005), -1.5, 0);
 		}
 
-		document.addEventListener("wheel", (e: WheelEvent) => {
+		canvas.addEventListener("wheel", (e: WheelEvent) => {
 			this.camera.position.z += e.deltaY * 0.05;
 			this.camera.position.z = clamp(this.camera.position.z, 10, 50);
 		})
@@ -190,12 +191,19 @@ export class PlayerController {
 		document.addEventListener("pointerlockchange", lockChangeAlert);
 
 
+		// this library is slightly broken it seems
 		this.inputs = new GameInputs(document.getElementById('gameplay-canvas') as HTMLElement, {
-			preventDefaults: true,
+			preventDefaults: false,
 			stopPropagation: true,
 			allowContextMenu: false,
 			disabled: false
 		});
+		this.inputs.preventDefaults = false;
+
+		this.inputs.filterEvents = (ev, bindingName) => {
+			if (this.inputsDisabled) return false
+			return true
+		}
 
 		// TODO: custom binds
 		this.inputs.bind('fwd', 'KeyW');

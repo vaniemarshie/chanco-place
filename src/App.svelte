@@ -40,15 +40,26 @@
 		opacity: 0;
 		pointer-events: none;
 	}
+
+	#chat {
+		position: absolute;
+		bottom: 16px;
+		left: 16px;
+	}
 </style>
 
 <script lang="ts">
 	import * as THREE from 'three'
 	import { loadAvatars } from './player';
-	import { ChanMap, ChanRoom } from './room';
+	import { ChanMap, ChanRoom } from './room.svelte';
+	import ChatWindow from './ChatWindow.svelte';
 
 	const map = new ChanMap();
 	let isLoading = true;
+
+	let chat: ChatWindow;
+	let onChatSend: Function | null = null;
+	let onChatFocus: Function | null = null;
 
 	function load() {
 		const manager = new THREE.LoadingManager();
@@ -61,7 +72,7 @@
 	function init() {
 		isLoading = false;
 
-		const room = new ChanRoom('room-1', map);
+		const room = new ChanRoom('room-1', map, chat);
 
 		let canvas = document.getElementById('gameplay-canvas') as HTMLCanvasElement;
 		const renderer = new THREE.WebGLRenderer({canvas: canvas});
@@ -75,6 +86,29 @@
 			renderer.setSize(window.innerWidth, window.innerHeight)
 		});
 
+		onChatFocus = (disabled: boolean) => {
+			room.controller.inputsDisabled = disabled;
+		}
+
+		onChatSend = (msg: string) => {
+			room.msgSend(msg);
+		}
+
+		function sendLocalMessage(message: string) {
+			chat.sendLogMessage({
+				text: message,
+				type: 'local'
+			})
+		}
+
+		sendLocalMessage('-- Welcome to CHANxCO Place! --');
+		sendLocalMessage('This place is a tech demo for a p2p based mmo/glorified chat room.');
+		sendLocalMessage('We are not associated with CHANxCO or any of the wonderful model creators.');
+		sendLocalMessage('-- Getting Started --');
+		sendLocalMessage('"/name [name]" to set your username for others to see!');
+		sendLocalMessage('"/avatars" to look at the avatars you can equip.');
+		sendLocalMessage('and "/avatar [name]" will set your avatar!');
+ 
 		// loop start!
 		const timer = new THREE.Timer();
 		renderer.setAnimationLoop((time) => {
@@ -92,3 +126,6 @@
 <div id='loading-text' class:done={!isLoading}>Loading Assets...</div>
 
 <canvas id='gameplay-canvas'></canvas>
+<div id="chat">
+	<ChatWindow onSend={onChatSend} onFocus={onChatFocus} bind:this={chat}/>
+</div>

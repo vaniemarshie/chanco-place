@@ -1,5 +1,4 @@
 - late joiners do not have the rotation of other players
-- chat system
-- join/settings menu (show before connecting)
+- chat bubbles
 - nametags
 - animations
